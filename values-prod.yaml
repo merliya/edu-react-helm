@@ -1,0 +1,33 @@
+################################################
+#  rfi-react-app service values
+################################################
+api:
+    name: "rfi-react-app"
+    version: 1.0.719
+    serviceType: "ClusterIP"
+    hostname: "become.phoenix.edu"
+    domainPrefix: "/request"
+    servicePort: 8080
+    replicaCount: 2
+    NODE_ENV: "production"
+    NODE_OPTIONS: "--max-http-header-size=16000"
+    NEW_RELIC_LICENSE_KEY: "Non-Prod_NEW_RELIC_api_key"
+    NEW_RELIC_LOG_LEVEL: "info"
+    NEW_RELIC_APP_NAME: "rfi-react-app-node-proxy"
+    NEW_RELIC_ENABLED: "true"
+    REACT_APP_PHXEDU_TEALIUM_ASYNC_LIB: "https://tags.tiqcdn.com/utag/uopx/uopxprospects/prod/utag.js"
+    REACT_APP_PHXEDU_TEALIUM_SYNC_LIB: "https://tags.tiqcdn.com/utag/uopx/uopxprospects/prod/utag.sync.js"
+
+################################################
+#  Common service values
+################################################
+# Not used
+cognito:
+  id: "m51te27khddsjq9k05c3uohm"
+  authUri: "https://uopxauth-stufac-prod.auth.us-east-1.amazoncognito.com/oauth2/authorize"
+  tokenUri: "https://uopxauth-stufac-prod.auth.us-east-1.amazoncognito.com/oauth2/token"
+
+edurfi:
+  msBaseUrl: "https://api.uopx.io/api"
+  plaBaseUrl: "https://globallb.phoenix.edu/"
+  plaBaseUrlHostHeader: "www.phoenix.edu"

@@ -1,0 +1,96 @@
+################################################
+#  rfi-react-app service values
+################################################
+api:
+    name: "edu-rfi-react-helm"
+    version: 1.0.12
+    serviceType: "ClusterIP"
+    roleName: "rfi_react_app_ms_role"
+    ecrName: "rfi_react_app"
+    nameSpace: edu-rfi-react
+    replicaCount: 1
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPU: 80
+    newrelic:
+        logLevel : "info"
+    containers:
+        app:
+            name: "service"
+            port: "8080"
+            path: "/request/request-information"
+        health:
+            readinessHttpPath: "http://localhost:8080//request/request-information"
+            readinessInitialDelay: 120
+            readinessPeriodSeconds: 10
+            readinessFailureThreshold: 12
+            livenessInitialDelay: 200
+            livenessPeriodSeconds: 10
+            livenessFailureThreshold: 2
+    containersEnv:
+        -
+            name: COGNITO_CLIENT_SECRET
+            valueFrom: {secretKeyRef: {key: COGNITO-CLIENT-SECRET, name: cognito-oauth}}
+        -
+            name: COGNITO_CLIENT_ID
+            valueFrom: {configMapKeyRef: {key: cognitoId, name: rfi-react-app-cognito}}
+        -
+            name: COGNITO_AUTH_URI
+            valueFrom: {configMapKeyRef: {key: cognitoAuthUri, name: rfi-react-app-cognito}}
+        -
+            name: COGNITO_TOKEN_URI
+            valueFrom: {configMapKeyRef: {key: cognitoTokenUri, name: rfi-react-app-cognito}}
+        -
+            name: NEW_RELIC_APP_NAME
+            valueFrom: {configMapKeyRef: {key: newrelicAppName, name: rfi-react-app-newrelic}}
+        -
+            name: NEW_RELIC_LOG_LEVEL
+            valueFrom: {configMapKeyRef: {key: newrelicLogLevel, name: rfi-react-app-newrelic}}
+        -
+            name: NEW_RELIC_LICENSE_KEY
+            valueFrom: {configMapKeyRef: {key: newrelicLicense, name: rfi-react-app-newrelic}}
+        -
+            name: NEW_RELIC_ENABLED
+            value : "true"
+        -
+            name: APP_PORT
+            valueFrom: {configMapKeyRef: {key: apiPort, name: rfi-react-app-app}}
+        -
+            name: REACT_APP_MICROSERVICES_BASE_URL
+            valueFrom: {configMapKeyRef: {key: msBaseUrl, name: rfi-react-app-app}}
+        -
+            name: PLA_BASE_URL
+            valueFrom: {configMapKeyRef: {key: plaBaseUrl, name: rfi-react-app-app}}
+        -
+            name: PLA_BASE_URL_HOST_HEADER
+            valueFrom: {configMapKeyRef: {key: plaBaseUrlHostHeader, name: rfi-react-app-app}}
+
+################################################
+#  Common service values
+################################################
+cognito:
+  id: "48q1i5691gfvvpptck2ro4mbuk"
+  authUri: "https://uopxauth-stufac-st.auth.us-east-1.amazoncognito.com/oauth2/authorize"
+  tokenUri: "https://uopxauth-stufac-st.auth.us-east-1.amazoncognito.com/oauth2/token"
+
+edurfi:
+  msBaseUrl: "https://api.st.uopx.io/api"
+  plaBaseUrl: "https://globallb-stage.phoenix.edu/"
+  plaBaseUrlHostHeader: "stage.phoenix.edu"
+
+
+imageRepository: 050853773894.dkr.ecr.us-east-1.amazonaws.com
+imagePullPolicy: IfNotPresent
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+resources:
+    limits:
+        cpu: 1000m
+        memory: 1800Mi
+    requests:
+        cpu: 300m
+        memory: 900Mi
+nodeSelector: {}
+tolerations: []
+affinity: {}

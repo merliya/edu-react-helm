@@ -1,0 +1,41 @@
+################################################
+#  rfi-react-app service values
+################################################
+api:
+    name: "rfi-react-app"
+    version: 1.0.726R
+    serviceType: "ClusterIP"
+    hostname: "become.sca.phoenix.edu"
+    domainPrefix: "/request"
+    servicePort: 8080
+    replicaCount: 1
+    MICROSERVICES_BASE_URL: "https://api.st.uopx.io"
+    REACT_APP_LOGOUT_URL: "https://stage.phoenix.edu/logout"
+    REACT_APP_OAUTH_AUTHORITY: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_fOHhdnuSW"
+    REACT_APP_OAUTH_CLIENT_ID: "NAP_OATH_CLIENT_ID"
+    REACT_APP_OAUTH_COGNITO_LOGOUT: "https://uopxauth-stufac-st.auth.us-east-1.amazoncognito.com/logout"
+    REACT_APP_OAUTH_REDIRECT_URI: "https://stage.phoenix.edu/rfi/oidc/callback"
+    REACT_APP_OAUTH_SCOPE: "openid api.st.uopx.io/public api.st.uopx.io/api:wallet:v1:wallets.GET api.st.uopx.io/api:wallet:v1:wallets.PUT api.st.uopx.io/api:wallet:v1:wallets.POST api.st.uopx.io/api:wallet:v1:wallets.DELETE api.st.uopx.io/api:persons:v1 api.st.uopx.io/api:contacts:v1 api.st.uopx.io/api:organizations:v1 sagas.st.uopx.io/api:sagas:v1:workflow:NAP.GET sagas.st.uopx.io/api:sagas:v1:tasks:napUI.POST sagas.st.uopx.io/api:sagas:v1:tasks:napUI.GET"
+    REACT_APP_OAUTH_SILENT_RENEW_URI: "https://stage.phoenix.edu/profile/silent-renew.html"
+    NODE_ENV: "staging"
+    NODE_OPTIONS: "--max-http-header-size=16000"
+    NEW_RELIC_LICENSE_KEY: "Non-Prod_NEW_RELIC_api_key"
+    NEW_RELIC_LOG_LEVEL: "info"
+    NEW_RELIC_APP_NAME: "rfi-react-app-node-proxy"
+    NEW_RELIC_ENABLED: "true"
+    REACT_APP_PHXEDU_TEALIUM_ASYNC_LIB: "https://tags.tiqcdn.com/utag/uopx/uopxprospects/qa/utag.js"
+    REACT_APP_PHXEDU_TEALIUM_SYNC_LIB: "https://tags.tiqcdn.com/utag/uopx/uopxprospects/qa/utag.sync.js"
+
+################################################
+#  Common service values
+################################################
+# Not used
+cognito:
+  id: "48q1i5691gfvvpptck2ro4mbuk"
+  authUri: "https://uopxauth-stufac-st.auth.us-east-1.amazoncognito.com/oauth2/authorize"
+  tokenUri: "https://uopxauth-stufac-st.auth.us-east-1.amazoncognito.com/oauth2/token"
+
+edurfi:
+  msBaseUrl: "https://api.st.uopx.io"
+  plaBaseUrl: "https://globallb-stage.phoenix.edu/"
+  plaBaseUrlHostHeader: "stage.phoenix.edu"

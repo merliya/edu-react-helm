@@ -1,0 +1,43 @@
+version: 0.2
+
+env:
+  variables:
+    API_IMAGE_TAG_VERSION: 1.0.6
+    SUBSCRIBER_IMAGE_TAG_VERSION: 1.0.2
+  secrets-manager:
+    newrelic_license: "microservice/newrelic.license:newrelic_prod_license"
+
+phases:
+  install:
+    commands:
+      - echo Installing Helm CLI...
+      - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+      - chmod 700 get_helm.sh
+      - ./get_helm.sh -v v3.7.1
+      - curl -sS -o kubectl https://amazon-eks.s3-us-west-2.amazonaws.com/1.14.6/2019-08-22/bin/linux/amd64/kubectl
+      - curl -o kubectl.sha256 https://amazon-eks.s3.us-west-2.amazonaws.com/1.16.8/2020-04-16/bin/linux/amd64/kubectl.sha256
+      - openssl sha1 -sha256 kubectl
+      - chmod +x ./kubectl
+      - mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+      - chmod +x ./kubectl
+      - export PATH=$PWD/:$PATH
+  
+  pre_build: # Add kubeconfig to access EKS cluster
+    commands:
+      - "mkdir ~/.kube"
+  
+  post_build:
+    commands:
+        - CREDENTIALS=$(aws sts assume-role --role-arn "arn:aws:iam::324765430599:role/uopx-k8-prod-rfi-react-app-admin-role" --role-session-name codebuild-kubectl-rfi-react-app)
+        - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+        - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+        - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+        - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+        - cp -f kubeconfig_prod ~/.kube/config
+        #- echo "$(< ~/.kube/config)"
+        - rm -rf kubectl*
+        #- helm upgrade --debug --dry-run -i rfi-react-app./ -f ./values-prod.yaml --namespace rfi-react-app 
+        #- helm upgrade --force --debug --dry-run -i rfi-react-app ./ -f ./values-prod.yaml --namespace rfi-react-app
+        - helm upgrade -i --debug rfi-react-app ./ -f ./values-prod.yaml --namespace rfi-react-app
+        # --set image.tag=$API_IMAGE_TAG_VERSION
+        # - helm upgrade -i subscriber-helm ./api -f ./api/values-st.yaml --set image.tag=$SUBSCRIBER_IMAGE_TAG_VERSION 
